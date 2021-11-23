@@ -1,0 +1,13 @@
+{
+    "PipelineGUI": "FancyScene",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "bake_vertex_normals_as_object_space_normalmap.vs" ],
+        "fragment": [ "bake_vertex_normals_as_object_space_normalmap.fs" ]
+    },
+    
+    "mesh": "head/head.obj",
+    
+    "ClearColor": [ 0.0, 0.0, 0.5, 1.0 ]
+}
