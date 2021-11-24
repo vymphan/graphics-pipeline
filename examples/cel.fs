@@ -31,9 +31,39 @@ uniform int num_lights;
 // From: https://stackoverflow.com/questions/9222217/how-does-the-fragment-shader-know-what-variable-to-use-for-the-color-of-a-pixel
 layout(location = 0) out vec4 FragColor;
 
+const vec3 eye = vec3( 0.0 );
+
 void main()
 {
-    // Your code goes here.
+    vec3 n = normalize( fNormal );
+    vec3 f = vec3( 0.0 );
+    vec3 k;
+
+    // Simplified Phong
+    // F = ∑L (IAL + [IL ( N · L ) + IL ( V · R )^n])
+
+    for ( int i = 0; i < num_lights; i++ ) {
+
+        vec3 l = normalize( lights[i].position - fPos );
+
+        f += lights[i].color_ambient; // I_AL
+
+        if ( dot( n, l ) >= 0 ) {
+            f += lights[i].color * dot( n, l ); // IL*(N . L)
+            f += lights[i].color
+               * pow( max( 0, dot( normalize( eye - fPos), normalize( reflect( -1.0*l, n ) ) ) ), material.shininess ); // IL ( V · R )^n]
+        }
+    }
     
-    FragColor = vec4( 1.0, 0.0, 1,0, 1.0 );
+    // F_discrete
+    f = min( floor( f * f * material.bands ), material.bands - 1 ) / ( material.bands - 1 );
+
+    if ( material.use_diffuse_texture ) {
+        k = material.color * vec3( texture( material.diffuse_texture, fTexCoord ) );
+    }
+    else {
+        k = material.color;
+    }
+
+    FragColor = clamp( k * f, 0.0, 1.0 );
 }

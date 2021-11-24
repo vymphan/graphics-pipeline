@@ -42,40 +42,53 @@ uniform int num_lights;
 layout(location = 0) out vec4 FragColor;
 
 // eye position in eye-space = origin
-const vec3 eye( 0.0, 0.0, 0.0 );
+const vec3 eye = vec3( 0.0, 0.0, 0.0 );
 
 void main()
 {
 
-    vec3 c( 0.0, 0.0, 0.0 );
+    vec3 c = vec3( 0.0, 0.0, 0.0 );
+    vec3 n = normalize( fNormal );
 
     // Phong reflectance model
     // K_R*I_R + K_T*I_T + SUM_L( K_A*I_AL + [ K_D*I_L*(N.L) + K_S*I_L*(V.R)^n ])
 
-    if ( material.reflective ) {
-        c += texture( uEnvironmentTex, normalize( fPos - eye ) );
-    }
-
-
     // Iterate through each light
-    for (int i = 0; i < MAX_LIGHTS, i++) {
+    for (int i = 0; i < num_lights; i++) {
+
+        vec3 l = normalize( lights[i].position - fPos);
 
         // Ambient lighting
-        c += material.color_ambient * light[i].color_ambient;
+        c += material.color_ambient * lights[i].color_ambient;
 
-        // Diffuse lighting
-        c += material.color_diffuse * light[i].color
-                    * max( 0, dot( normalize( fNormal ), normalize( light.position - fPos) ) );
+        if ( dot( n, l ) >= 0 ) {
+            // Diffuse lighting
+            vec3 K_D;
+            if ( material.use_diffuse_texture ) {
+                K_D = material.color_diffuse * vec3( texture( material.diffuse_texture, fTexCoord ) );
+            }
+            else {
+                K_D = material.color_diffuse;
+            }
 
-        // Specular ligting
-        if ( DL != 0 )
-            c += material.color_specular * light[i].color
-                    * pow( max( 0, dot( normalize ( eye - fPos ), normalize( reflect( fPos - light.position, fNormal ) ) ) ), material.shininess );
+            c += K_D * lights[i].color * max( 0, dot( n, l ) );
+
+            // Specular ligting
+            c += material.color_specular * lights[i].color
+                    * pow( max( 0, dot( normalize ( eye - fPos ), normalize( reflect( -1.0*l, n ) ) ) ), material.shininess );
+        }
 
     }
 
+    // Reflection
+    if ( material.reflective ) {
+        c += material.color_reflect * vec3( texture( uEnvironmentTex, reflect( fPos - eye, n ) ) );
+    }
 
+    // Refraction
+    if ( material.refractive ) {
+        c += material.color_refract * vec3( texture( uEnvironmentTex, refract( fPos - eye, n, material.index_of_refraction ) ) );
+    }
 
-    
-    FragColor = vec4( 1.0, 0.0, 1.0, 1.0 );
+    FragColor = clamp( c, 0.0, 1.0 );
 }

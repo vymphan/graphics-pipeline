@@ -16,7 +16,7 @@ void main()
 {
 
     // Convert Position from world-space to eye-space with uViewMatrix
-    fPos = uViewMatrix * vPos;
+    fPos = vec3( uViewMatrix * vec4( vPos, 1.0 ) );
 
     // Convert Normal from world-space to eye-space with uNormalMatrix
     fNormal = uNormalMatrix * vNormal;
@@ -24,6 +24,12 @@ void main()
     // Textcoords are the same
     fTexCoord = vTexCoord;
 
+    // Convert Position from camera-space to normalized-device coordinates
+    gl_Position = uProjectionMatrix * vec4( fPos, 1.0 );
 
-    gl_Position = vec4( uProjectionMatrix * fPos, 1.0 );
+
 }
+
+// Note to self:
+// fPos, fNormal, fTextCoord are for Phong model in fragment shader to get the color
+// gl_Position is the position in perspective for the screen
