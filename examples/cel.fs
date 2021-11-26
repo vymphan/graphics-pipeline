@@ -65,5 +65,5 @@ void main()
         k = material.color;
     }
 
-    FragColor = clamp( k * f, 0.0, 1.0 );
+    FragColor = clamp( vec4( k * f, 1.0 ), 0.0, 1.0 );
 }
