@@ -90,5 +90,5 @@ void main()
         c += material.color_refract * vec3( texture( uEnvironmentTex, refract( fPos - eye, n, material.index_of_refraction ) ) );
     }
 
-    FragColor = clamp( c, 0.0, 1.0 );
+    FragColor = clamp( vec4( c, 1.0 ), 0.0, 1.0 );
 }
