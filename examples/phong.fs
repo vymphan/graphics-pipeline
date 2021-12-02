@@ -65,7 +65,7 @@ void main()
             // Diffuse lighting
             vec3 K_D;
             if ( material.use_diffuse_texture ) {
-                K_D = material.color_diffuse * vec3( texture( material.diffuse_texture, fTexCoord ) );
+                K_D = material.color_diffuse * texture( material.diffuse_texture, fTexCoord ).rgb;
             }
             else {
                 K_D = material.color_diffuse;
@@ -82,13 +82,14 @@ void main()
 
     // Reflection
     if ( material.reflective ) {
-        c += material.color_reflect * vec3( texture( uEnvironmentTex, reflect( fPos - eye, n ) ) );
+        c += material.color_reflect * texture( uEnvironmentTex, reflect( fPos - eye, n ) ).rgb;
     }
 
     // Refraction
     if ( material.refractive ) {
-        c += material.color_refract * vec3( texture( uEnvironmentTex, refract( fPos - eye, n, material.index_of_refraction ) ) );
+        c += material.color_refract * texture( uEnvironmentTex, refract( fPos - eye, n, material.index_of_refraction ) ).rgb;
     }
+
 
     FragColor = clamp( vec4( c, 1.0 ), 0.0, 1.0 );
 }

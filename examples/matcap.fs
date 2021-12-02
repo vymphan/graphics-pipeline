@@ -26,10 +26,10 @@ void main()
     vec3 n = fNormal;
     vec4 color;
 
-    // Use normals from normal maps
-    if ( material.use_normal_map ) {
-        n = uNormalMatrix * ( 2 * texture( material.normal_map, fTexCoord ).rgb - 1 );
-    }
+    //Use normals from normal maps
+   if ( material.use_normal_map ) {
+       n = uNormalMatrix * ( 2 * texture( material.normal_map, fTexCoord ).rgb - 1 );
+   }
 
     color = texture( material.matcap_texture, n.xy*0.5 + 0.5 ).rgba;
 

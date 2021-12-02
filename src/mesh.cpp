@@ -38,7 +38,18 @@ void Mesh::computeTangentBitangent() {
     // Your code goes here.
     
     // Iterate over faces.
-    // Compute the face normal.
+    for ( const Triangle& t : face_positions ) {
+        // struct t = { A, B, C } == { index1, index2, index3 }
+        const vec3 a = positions.at( t.A );
+        const vec3 b = positions.at( t.B );
+        const vec3 c = positions.at( t.C );
+
+        // Compute face normal
+        vec3 n = normalize( cross( ( b - a ), ( c - a ) ) );
+
+
+
+    }
     // Compute the known tangent-to-world examples from the triangle edges.
     // Solve for the tangent frame matrix.
     // Average the first column (tangent) and second column (bitangent).

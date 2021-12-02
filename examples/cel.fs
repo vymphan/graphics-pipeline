@@ -36,7 +36,7 @@ const vec3 eye = vec3( 0.0 );
 void main()
 {
     vec3 n = normalize( fNormal );
-    vec3 f = vec3( 0.0 );
+    float f = 0.0;
     vec3 k;
 
     // Simplified Phong
@@ -59,7 +59,7 @@ void main()
     f = min( floor( f * f * material.bands ), material.bands - 1 ) / ( material.bands - 1 );
 
     if ( material.use_diffuse_texture ) {
-        k = material.color * vec3( texture( material.diffuse_texture, fTexCoord ) );
+        k = material.color * texture( material.diffuse_texture, fTexCoord ).rgb;
     }
     else {
         k = material.color;
