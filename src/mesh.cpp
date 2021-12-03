@@ -38,7 +38,7 @@ void Mesh::computeTangentBitangent() {
     // Your code goes here.
     
     // Iterate over faces.
-    for ( int i = 0; i <= face_positions.size(); i++ ) {
+    for ( int i = 0; i < face_positions.size(); i++ ) {
         // struct t = { A, B, C } == { index1, index2, index3 }
         const vec3 a_object = positions.at( face_positions[i].A );
         const vec3 b_object = positions.at( face_positions[i].B );
@@ -58,6 +58,7 @@ void Mesh::computeTangentBitangent() {
         const vec3 n_object = normalize( cross( v1, v2 ) );
         const vec3 n_texcoord = normalize( cross( u1, u2 ) );
 
+        // Compute the known tangent-to-world examples from the triangle edges.
         mat3 U;
         U[0] = u1;
         U[1] = u2;
@@ -80,7 +81,6 @@ void Mesh::computeTangentBitangent() {
 
 
     }
-    // Compute the known tangent-to-world examples from the triangle edges.
     // Solve for the tangent frame matrix.
     // Average the first column (tangent) and second column (bitangent).
     

@@ -5,9 +5,12 @@ Assignment 6: Shaders
 
 VIP: Thomas Rigger
 
-I made my own shaders for the 10-point creative part. There are four new files for this:
+I made my own shaders for the 10-point creative part with uTime. There are four new files for this:
 vy_bunny.json (I made a new json file to set the bunny with a new matcap "candy.png")
-vy.vs (vertex shader to continuously spin the bunny around the y axis)
+vy.vs (vertex shader to continuously spin the bunny around an axis)
 vy.fs (fragment shader to continuously change the color of the bunny as it spins)
-candy.png (in matcaps folder, I googled up matcaps and found this cute matcap)
+candy.png (in matcaps folder, I googled up matcaps and found this cute one)
 
+In build folder, I ran my rabbit with: ./pipeline ../examples/vy_bunny.json
+
+I hope you like it :)
