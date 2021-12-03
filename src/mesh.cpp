@@ -38,14 +38,37 @@ void Mesh::computeTangentBitangent() {
     // Your code goes here.
     
     // Iterate over faces.
-    for ( const Triangle& t : face_positions ) {
+    for ( int i = 0; i <= face_positions.size(); i++ ) {
         // struct t = { A, B, C } == { index1, index2, index3 }
-        const vec3 a = positions.at( t.A );
-        const vec3 b = positions.at( t.B );
-        const vec3 c = positions.at( t.C );
+        const vec3 a_object = positions.at( face_positions[i].A );
+        const vec3 b_object = positions.at( face_positions[i].B );
+        const vec3 c_object = positions.at( face_positions[i].C );
+
+        const vec3 a_texcoord = vec3( texcoords.at( face_texcoords[i].A ), 0. );
+        const vec3 b_texcoord = vec3( texcoords.at( face_texcoords[i].B ), 0. );
+        const vec3 c_texcoord = vec3( texcoords.at( face_texcoords[i].B ), 0. );
+
+        const vec3 v1 = b_object - a_object;
+        const vec3 v2 = c_object - a_object;
+
+        const vec3 u1 = b_texcoord - a_texcoord;
+        const vec3 u2 = c_texcoord - a_texcoord;
 
         // Compute face normal
-        vec3 n = normalize( cross( ( b - a ), ( c - a ) ) );
+        const vec3 n_object = normalize( cross( v1, v2 ) );
+        const vec3 n_texcoord = normalize( cross( u1, u2 ) );
+
+        mat3 U;
+        U[0] = u1;
+        U[1] = u2;
+        U[2] = n_texcoord;
+
+        mat3 V;
+        V[0] = v1;
+        V[1] = v2;
+        V[2] = n_object;
+
+        mat3 M = V * inverse( U );
 
 
 
