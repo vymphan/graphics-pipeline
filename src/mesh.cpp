@@ -70,6 +70,13 @@ void Mesh::computeTangentBitangent() {
 
         mat3 M = V * inverse( U );
 
+        tangents.at( face_tangents[i].A ) += M[0];
+        tangents.at( face_tangents[i].B ) += M[0];
+        tangents.at( face_tangents[i].C ) += M[0];
+
+        bitangents.at( face_tangents[i].A ) += M[1];
+        bitangents.at( face_tangents[i].B ) += M[1];
+        bitangents.at( face_tangents[i].C ) += M[1];
 
 
     }

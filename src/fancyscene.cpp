@@ -59,6 +59,11 @@ VertexAndFaceArraysPtr vaoFromOBJPath( const std::string& path, const ShaderProg
         // Your code goes here.
         // 1 Flatten.
         // 2 Upload to "vTangent" and "vBitangent".
+        auto flat_vTangent = flatten_attribute( mesh.face_tangents, mesh.tangents );
+        vao->uploadAttribute( flat_vTangent, program.getAttribLocation( "vPos" ) );
+
+        auto flat_vBitangent = flatten_attribute( mesh.face_tangents, mesh.bitangents );
+        vao->uploadAttribute( flat_vBitangent, program.getAttribLocation( "vPos" ) );
     }
     
     return vao;
